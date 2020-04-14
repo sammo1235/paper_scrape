@@ -15,7 +15,6 @@ module Sources
         query: URI.encode_www_form(hash)
       )
       puts "#{uri}"
-      byebug
       @doc = Nokogiri::HTML(open("#{uri}"))
     end
 
