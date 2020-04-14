@@ -14,7 +14,9 @@ module Sources
         path: SEARCH,
         query: URI.encode_www_form(hash)
       )
-      @doc = Nokogiri::HTML(open(uri))
+      puts "#{uri}"
+      byebug
+      @doc = Nokogiri::HTML(open("#{uri}"))
     end
 
     def fetch_papers
