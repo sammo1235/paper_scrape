@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sendgrid-ruby'
 require 'erb'
 require 'byebug'
@@ -13,37 +15,38 @@ module Mailers
     end
 
     def send_mail
-      sg = get_key
-      response = sg.client.mail._("send").post(request_body: compose_email)
+      sg = api_key
+      response = sg.client.mail._('send').post(request_body: compose_email)
       puts response.status_code
     end
 
     private
+
     def compose_email
       JSON.generate({
-      personalizations: [
-        {
-          to: [
-            {
-              email: "#{@email}"
-            }
-          ],
-          subject: "#{@name}, Here Are Your Papers for Search: #{@search.join(' ')}"
-        }
-      ],
-      from: {
-        email: "samrhysperry@gmail.com"
-      },
-      content: [
-        {
-          type: "text/html",
-          value: write_content
-        }
-      ]
-    })
+                      personalizations: [
+                        {
+                          to: [
+                            {
+                              email: @email.to_s
+                            }
+                          ],
+                          subject: "#{@name}, Here Are Your Papers for Search: #{@search.join(' ')}"
+                        }
+                      ],
+                      from: {
+                        email: 'samrhysperry@gmail.com'
+                      },
+                      content: [
+                        {
+                          type: 'text/html',
+                          value: write_content
+                        }
+                      ]
+                    })
     end
 
-    def get_key
+    def api_key
       SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
     end
 
@@ -58,19 +61,15 @@ module Mailers
           <h2>For the search terms \"<%=@search.join(', ')%>\", we found:</h2>
           <% @data.map do |paper| %>
           <h2> <%= paper['title'] %></h2>
-          <% date = Date.parse(paper['date']) %>
-          <h3> <%= date.strftime('%B %d, %Y') %></h3>
+          <% paper['date'].length > 4 ? date = Date.parse(paper['date']) : date = paper['date'] %>
+          <h3> <%= date.respond_to?(:strftime) ? date.strftime('%B %-d, %Y') : date %></h3>
           <h3><a href=<%=paper['link']%>><%=paper['link']%></a></h3>
           <p> <%= paper['description'] %></p>
           <p> ------------------------------ </p>
           <% end %>
         </body>
       </html>")
-      renderer.result(self.get_binding)
-    end
-
-    def get_binding
-      binding()
+      renderer.result(binding)
     end
   end
 end

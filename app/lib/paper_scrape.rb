@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 require_relative './sources/nature'
+require_relative './sources/google_scholar'
 require 'byebug'
 
 class PaperScrape
   include Sources
   SOURCES = [
-    Sources::Nature
+    Sources::Nature,
+    Sources::GoogleScholar
   ].freeze
 
   def initialize(search)
@@ -12,17 +16,17 @@ class PaperScrape
   end
 
   def to_array(search)
-    unless search.is_a? Array
-      search.split(' ')
-    else
+    if search.is_a? Array
       search
+    else
+      search.split(' ')
     end
   end
 
-  def get_data
+  def fetch_data
     data = []
     SOURCES.map do |sourced|
-      data << sourced.new(@search).get_papers
+      data << sourced.new(@search).fetch_papers
     end
     data
   end
