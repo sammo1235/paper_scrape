@@ -22,8 +22,11 @@ module Sources
       @doc.css("div[class='gs_ri']").map do |paper|
         hash = {}
         hash['title'] = paper.css('a').text
-        hash['link'] = paper.css("h3[class='gs_rt']>a")
-                            .attribute('href').value
+        if !paper.css("h3[class='gs_rt']>a").empty?
+          hash['link'] = paper.css("h3[class='gs_rt']>a").attribute('href').value
+        else
+          hash['link'] = "citation"
+        end
         hash['description'] = paper.css("div[class='gs_rs']")
                                    .text
         hash['date'] = Time.now.year.to_s
@@ -54,3 +57,5 @@ module Sources
     end
   end
 end
+
+puts Sources::GoogleScholar.new(['wolves', 'canada']).fetch_papers

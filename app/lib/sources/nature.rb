@@ -36,5 +36,3 @@ module Sources
     end
   end
 end
-
-puts Sources::Nature.new(['wolves', 'canada']).fetch_papers
