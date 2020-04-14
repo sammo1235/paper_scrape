@@ -14,18 +14,14 @@ module Sources
 
     def fetch_papers
       data = []
-      @doc.css("div[class='cleared']").each_with_index do |paper, index|
-        next if index.zero?
-
-        index -= 1
+      @doc.css("li[class='mb20 pb20 cleared']").each_with_index do |paper, index|
         heading = paper.css("h2[role='heading']")
-        inner = {}
-        inner['title'] = heading.text.strip
-        inner['date'] = @doc.css("p[class='mt6 mb0 inline-block text13
-                            equalize-line-height text-gray-light']")[index]
-                            .css("time[itemprop='datePublished']")[0]['datetime']
-        inner['link'] = "#{BASE_URL}#{heading.children[1].attributes['href'].value}"
-        inner['description'] = paper.css("ul[class='clean-list text13 serif mb0']").text.strip
+        inner = {
+          title: heading.text.strip,
+          date: paper.css('p>time').text.strip,
+          link: "#{BASE_URL}#{heading.css('a').attribute('href').value}",
+          description: paper.css("ul[class='clean-list text13 serif mb0']").text.strip
+        }
         data << inner
         break if index == 5
       end
@@ -40,3 +36,5 @@ module Sources
     end
   end
 end
+
+puts Sources::Nature.new(['wolves', 'canada']).fetch_papers

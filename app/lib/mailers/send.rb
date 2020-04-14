@@ -61,8 +61,7 @@ module Mailers
           <h2>For the search terms \"<%=@search.join(', ')%>\", we found:</h2>
           <% @data.map do |paper| %>
           <h2> <%= paper['title'] %></h2>
-          <% paper['date'].length > 4 ? date = Date.parse(paper['date']) : date = paper['date'] %>
-          <h3> <%= date.respond_to?(:strftime) ? date.strftime('%B %-d, %Y') : date %></h3>
+          <h3> <%= paper['date'] %></h3>
           <h3><a href=<%=paper['link']%>><%=paper['link']%></a></h3>
           <p> <%= paper['description'] %></p>
           <p> ------------------------------ </p>
