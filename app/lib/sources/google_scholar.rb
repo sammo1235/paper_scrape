@@ -24,7 +24,8 @@ module Sources
         hash = {}
         hash['title'] = paper.css('a').text
         if !paper.css("h3[class='gs_rt']>a").empty?
-          hash['link'] = paper.css("h3[class='gs_rt']>a").attribute('href').value
+          hash['link'] = paper.css("h3[class='gs_rt']>a")
+                              .attribute('href').value
         else
           hash['link'] = "citation"
         end
@@ -58,5 +59,3 @@ module Sources
     end
   end
 end
-
-puts Sources::GoogleScholar.new(['wolves', 'canada']).fetch_papers
