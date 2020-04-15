@@ -14,8 +14,7 @@ module Sources
         path: SEARCH,
         query: URI.encode_www_form(hash)
       )
-      puts "#{uri}"
-      @doc = Nokogiri::HTML(open("#{uri}"))
+      @doc = Nokogiri::HTML(open("#{uri}", ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, 'User-Agent' => 'Firefox'))
     end
 
     def fetch_papers
