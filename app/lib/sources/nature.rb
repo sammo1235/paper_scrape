@@ -9,7 +9,7 @@ module Sources
 
     def initialize(search_terms)
       query = build_query(search_terms)
-      @doc = Nokogiri::HTML(open(query, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, 'User-Agent' => 'Firefox'))
+      @doc = Nokogiri::HTML(open(query, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, 'User-Agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0'))
     end
 
     def fetch_papers
