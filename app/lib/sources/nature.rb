@@ -12,7 +12,7 @@ module Sources
       @doc = Nokogiri::HTML(open(
                               query,
                               ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                              'User-Agent' => 'ruby'
+                              'User-Agent' => 'safari'
                             ))
     end
 
@@ -21,10 +21,10 @@ module Sources
       @doc.css("li[class='mb20 pb20 cleared']")&.each_with_index do |paper, index|
         heading = paper.css("h2[role='heading']")
         inner = {
-          'title' => heading.text.strip,
-          'date' => paper.css('p>time').text.strip,
-          'link' => "#{BASE_URL}#{heading.css('a').attribute('href').value}",
-          'description' => paper.css("ul[class='clean-list text13 serif mb0']").text.strip
+          title: heading.text.strip,
+          date: paper.css('p>time').text.strip,
+          link: "#{BASE_URL}#{heading.css('a').attribute('href').value}",
+          description: paper.css("ul[class='clean-list text13 serif mb0']").text.strip
         }
         data << inner
         break if index == 5

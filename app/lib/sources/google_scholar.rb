@@ -17,25 +17,24 @@ module Sources
       @doc = Nokogiri::HTML(open(
                               uri.to_s,
                               ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                              'User-Agent' => 'ruby'
+                              'User-Agent' => 'safari'
                             ))
     end
 
     def fetch_papers
       data = []
       @doc.css("div[class='gs_ri']")&.map do |paper|
-        if !paper.css("h3[class='gs_rt']>a").empty?
-          hash = {
-            'title' => paper.css('a').text,
-            'link' => paper.css("h3[class='gs_rt']>a")
-                           .attribute('href').value,
-            'description' => paper.css("div[class='gs_rs']")
-                                  .text,
-            'date' => Time.now.year.to_s
-          }
-        else
-          next
-        end
+        next if paper.css("h3[class='gs_rt']>a").empty?
+
+        hash = {
+          title: paper.css('a').text,
+          link: paper.css("h3[class='gs_rt']>a")
+                     .attribute('href').value,
+          description: paper.css("div[class='gs_rs']")
+                            .text,
+          date: Time.now.year.to_s
+        }
+
         data << hash
       end
       data

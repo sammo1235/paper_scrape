@@ -21,9 +21,7 @@ module Mailers
       puts response.status_code
     end
 
-    def get_binding
-      binding
-    end
+    private
 
     def compose_email
       JSON.generate({
@@ -63,15 +61,15 @@ module Mailers
           <h1><%=@name%>, we have some new papers for you!</h1>
           <h2>For the search terms \"<%=@search.join(', ')%>\", we found:</h2>
           <% @data.map do |paper| %>
-          <h2> <%= paper['title'] %></h2>
-          <h3> <%= paper['date'] %></h3>
-          <h3><a href=<%=paper['link']%>><%=paper['link']%></a></h3>
-          <p> <%= paper['description'] %></p>
+          <h2> <%= paper[:title] %></h2>
+          <h3> <%= paper[:date] %></h3>
+          <h3><a href=<%=paper[:link]%>><%=paper[:link]%></a></h3>
+          <p> <%= paper[:description] %></p>
           <p> ------------------------------ </p>
           <% end %>
         </body>
       </html>")
-      renderer.result(get_binding)
+      renderer.result(binding)
     end
   end
 end
