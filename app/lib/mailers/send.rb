@@ -3,6 +3,7 @@
 require 'sendgrid-ruby'
 require 'erb'
 require 'byebug'
+require 'ostruct'
 
 module Mailers
   class Send
@@ -20,7 +21,9 @@ module Mailers
       puts response.status_code
     end
 
-    private
+    def get_binding
+      binding
+    end
 
     def compose_email
       JSON.generate({
@@ -68,7 +71,7 @@ module Mailers
           <% end %>
         </body>
       </html>")
-      renderer.result(binding)
+      renderer.result(get_binding)
     end
   end
 end

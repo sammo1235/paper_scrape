@@ -20,17 +20,18 @@ module Sources
     def fetch_papers
       data = []
       @doc.css("div[class='gs_ri']").map do |paper|
-        hash = {}
-        hash['title'] = paper.css('a').text
         if !paper.css("h3[class='gs_rt']>a").empty?
-          hash['link'] = paper.css("h3[class='gs_rt']>a")
-                              .attribute('href').value
+          hash = {
+            'title' => paper.css('a').text,
+            'link' => paper.css("h3[class='gs_rt']>a")
+                              .attribute('href').value,
+            'description' => paper.css("div[class='gs_rs']")
+                                   .text,
+            'date' => Time.now.year.to_s
+          }
         else
-          hash['link'] = "citation"
+          next
         end
-        hash['description'] = paper.css("div[class='gs_rs']")
-                                   .text
-        hash['date'] = Time.now.year.to_s
         data << hash
       end
       data
