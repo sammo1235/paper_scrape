@@ -14,7 +14,7 @@ module Sources
         path: SEARCH,
         query: URI.encode_www_form(hash)
       )
-      @doc = Nokogiri::HTML(open("#{uri}", ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, 'User-Agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0'))
+      @doc = Nokogiri::HTML(open(uri.to_s, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE, 'User-Agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0'))
     end
 
     def fetch_papers
@@ -24,9 +24,9 @@ module Sources
           hash = {
             'title' => paper.css('a').text,
             'link' => paper.css("h3[class='gs_rt']>a")
-                              .attribute('href').value,
+                           .attribute('href').value,
             'description' => paper.css("div[class='gs_rs']")
-                                   .text,
+                                  .text,
             'date' => Time.now.year.to_s
           }
         else

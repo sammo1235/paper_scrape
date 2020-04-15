@@ -14,19 +14,17 @@ module Sources
 
     def fetch_papers
       data = []
-        if !@doc.css("li[class='mb20 pb20 cleared']").nil?
-          @doc.css("li[class='mb20 pb20 cleared']").each_with_index do |paper, index|
-            heading = paper.css("h2[role='heading']")
-            inner = {
-              'title' => heading.text.strip,
-              'date' => paper.css('p>time').text.strip,
-              'link' => "#{BASE_URL}#{heading.css('a').attribute('href').value}",
-              'description' => paper.css("ul[class='clean-list text13 serif mb0']").text.strip
-            }
-            data << inner
-            break if index == 5
-          end
-        end
+      @doc.css("li[class='mb20 pb20 cleared']")&.each_with_index do |paper, index|
+        heading = paper.css("h2[role='heading']")
+        inner = {
+          'title' => heading.text.strip,
+          'date' => paper.css('p>time').text.strip,
+          'link' => "#{BASE_URL}#{heading.css('a').attribute('href').value}",
+          'description' => paper.css("ul[class='clean-list text13 serif mb0']").text.strip
+        }
+        data << inner
+        break if index == 5
+      end
       data
     end
 

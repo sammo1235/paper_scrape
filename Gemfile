@@ -6,8 +6,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'byebug'
 gem 'nokogiri'
+gem 'openssl'
 gem 'rake'
 gem 'rubocop'
 gem 'sendgrid-ruby'
-gem 'openssl'
-gem 'ostruct'
