@@ -15,6 +15,7 @@ module Sources
 
     def fetch_papers
       data = []
+      return data if @doc.nil?
       @doc.css("div[class='gs_ri']")&.map do |paper|
         next if paper.css("h3[class='gs_rt']>a").empty?
 

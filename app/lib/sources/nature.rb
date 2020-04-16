@@ -15,12 +15,13 @@ module Sources
 
     def fetch_papers
       data = []
+      return data if @doc.nil?
       @doc.css("li[class='mb20 pb20 cleared']")&.each_with_index do |paper, index|
         heading = paper.css("h2[role='heading']")
         inner = {
           title: heading.text.strip,
           date: paper.css('p>time').text.strip,
-          link: heading.css('a').attribute('href').value,
+          link: "https://www.#{BASE_URL}#{heading.css('a').attribute('href').value}",
           description: paper.css("ul[class='clean-list text13 serif mb0']").text.strip
         }
         data << inner
