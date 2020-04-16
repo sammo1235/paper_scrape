@@ -20,7 +20,7 @@ module Sources
         inner = {
           title: heading.text.strip,
           date: paper.css('p>time').text.strip,
-          link: "#{BASE_URL}#{heading.css('a').attribute('href').value}",
+          link: heading.css('a').attribute('href').value,
           description: paper.css("ul[class='clean-list text13 serif mb0']").text.strip
         }
         data << inner
