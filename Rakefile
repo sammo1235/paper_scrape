@@ -14,7 +14,7 @@ task :send_emails_to_users do
     Mailers::Send.new(
       user['email'],
       user['search_terms'],
-      data.flatten,
+      data,
       user['name']
     ).send_mail
   end

@@ -4,16 +4,13 @@ require_relative 'base_source'
 
 module Sources
   class Nature < BaseSource
-    BASE_URL = 'https://www.nature.com'
-    SEARCH = '/search?q='
+    BASE_URL = 'nature.com'
+    SEARCH_PATH = '/search'
 
     def initialize(search_terms)
-      query = build_query(search_terms)
-      @doc = Nokogiri::HTML(open(
-                              query,
-                              ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                              'User-Agent' => 'safari'
-                            ))
+      hash = build_query(search_terms)
+      uri = build_uri(self.class, hash)
+      @doc = fetch_page(uri)
     end
 
     def fetch_papers
@@ -34,9 +31,10 @@ module Sources
 
     private
 
-    def build_query(search_terms)
-      search_uri = "#{BASE_URL}#{SEARCH}"
-      "#{search_uri}#{search_terms.size < 2 ? search_terms[0] : search_terms.join(' ')}"
+    def build_query(search)
+      {
+        q: search.respond_to?(:join) ? search.join(' ') : search
+      }
     end
   end
 end

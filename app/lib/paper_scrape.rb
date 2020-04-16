@@ -30,6 +30,6 @@ class PaperScrape
     SOURCES.map do |sourced|
       data << sourced.new(@search).fetch_papers
     end
-    data
+    data.flatten
   end
 end

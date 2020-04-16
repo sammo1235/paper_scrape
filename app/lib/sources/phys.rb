@@ -9,16 +9,8 @@ module Sources
 
     def initialize(search_terms)
       hash = build_query(search_terms)
-      uri = URI::HTTP.build(
-        host: BASE_URL,
-        path: SEARCH_PATH,
-        query: URI.encode_www_form(hash)
-      )
-      @doc = Nokogiri::HTML(open(
-                              uri,
-                              ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                              'User-Agent' => 'safari'
-                            ))
+      uri = build_uri(self.class, hash)
+      @doc = fetch_page(uri)
     end
 
     def fetch_papers

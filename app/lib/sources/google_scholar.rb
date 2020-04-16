@@ -5,20 +5,12 @@ require_relative 'base_source'
 module Sources
   class GoogleScholar < BaseSource
     BASE_URL = 'scholar.google.com'
-    SEARCH = '/scholar'
+    SEARCH_PATH = '/scholar'
 
     def initialize(search_terms)
       hash = build_query(search_terms)
-      uri = URI::HTTP.build(
-        host: BASE_URL,
-        path: SEARCH,
-        query: URI.encode_www_form(hash)
-      )
-      @doc = Nokogiri::HTML(open(
-                              uri.to_s,
-                              ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                              'User-Agent' => 'safari'
-                            ))
+      uri = build_uri(self.class, hash)
+      @doc = fetch_page(uri)
     end
 
     def fetch_papers
