@@ -16,6 +16,7 @@ module Sources
     def fetch_papers
       data = []
       return data if @doc.nil?
+
       @doc.css("div[class='sorted-article-content w-100 d-flex flex-column']")&.map do |paper|
         header = paper.css("h4[class='mb-2']")
         next if header.nil?

@@ -16,6 +16,7 @@ module Sources
     def fetch_papers
       data = []
       return data if @doc.nil?
+
       @doc.css("li[class='mb20 pb20 cleared']")&.each_with_index do |paper, index|
         heading = paper.css("h2[role='heading']")
         inner = {

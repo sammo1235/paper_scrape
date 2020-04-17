@@ -8,15 +8,17 @@ require 'openssl'
 module Sources
   class BaseSource
     def fetch_page(uri)
-      Nokogiri::HTML(open(
-                       uri,
-                       ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                       'User-Agent' => 'safari'
-                     ))
-    rescue OpenURI::HTTPError => e
-      response = e.io
-      puts "Rescued: #{response.status}"
-      []
+      begin
+        Nokogiri::HTML(open(
+                        uri,
+                        ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
+                        'User-Agent' => 'safari'
+                      ))
+      rescue OpenURI::HTTPError => e
+        response = e.io
+        puts "Rescued: #{response.status}"
+        nil
+      end
     end
 
     def build_uri(source, hash)
