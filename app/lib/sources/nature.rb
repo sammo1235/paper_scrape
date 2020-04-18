@@ -4,7 +4,7 @@ require_relative 'base_source'
 
 module Sources
   class Nature < BaseSource
-    BASE_URL = 'nature.com'
+    BASE_URL = 'www.nature.com'
     SEARCH_PATH = '/search'
 
     def initialize(search_terms)

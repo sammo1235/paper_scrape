@@ -4,7 +4,7 @@ require_relative 'base_source'
 
 module Sources
   class GoogleScholar < BaseSource
-    BASE_URL = 'scholar.google.com'
+    BASE_URL = 'www.scholar.google.com'
     SEARCH_PATH = '/scholar'
 
     def initialize(search_terms)
