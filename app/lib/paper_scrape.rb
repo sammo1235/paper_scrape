@@ -7,6 +7,9 @@ require 'byebug'
 
 class PaperScrape
   include Sources
+
+  attr_reader :search
+
   SOURCES = [
     Sources::Nature,
     Sources::GoogleScholar,
@@ -14,22 +17,12 @@ class PaperScrape
   ].freeze
 
   def initialize(search)
-    @search = to_array(search)
-  end
-
-  def to_array(search)
-    if search.is_a? Array
-      search
-    else
-      search.split(' ')
-    end
+    @search = search
   end
 
   def fetch_data
-    data = []
-    SOURCES.map do |sourced|
-      data << sourced.new(@search).fetch_papers
-    end
-    data.flatten
+    SOURCES.each_with_object([]) do |source, array|
+      array << source.new(search).fetch_papers
+    end.flatten
   end
 end

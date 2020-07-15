@@ -7,17 +7,9 @@ module Sources
     BASE_URL = 'www.nature.com'
     SEARCH_PATH = '/search'
 
-    def initialize(search_terms)
-      hash = build_query(search_terms)
-      uri = build_uri(self.class, hash)
-      @doc = fetch_page(uri)
-    end
-
     def fetch_papers
-      data = []
-      return data if @doc.nil?
+      document.css("li[class='mb20 pb20 cleared']")&.each_with_object([]).with_index do |(paper, array), index|
 
-      @doc.css("li[class='mb20 pb20 cleared']")&.each_with_index do |paper, index|
         heading = paper.css("h2[role='heading']")
         inner = {
           title: heading.text.strip,
@@ -25,10 +17,8 @@ module Sources
           link: "https://www.#{BASE_URL}#{heading.css('a').attribute('href').value}",
           description: paper.css("ul[class='clean-list text13 serif mb0']").text.strip
         }
-        data << inner
-        break if index == 5
+        array[index] = inner
       end
-      data
     end
 
     private

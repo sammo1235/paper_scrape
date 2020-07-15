@@ -7,17 +7,8 @@ module Sources
     BASE_URL = 'www.scholar.google.com'
     SEARCH_PATH = '/scholar'
 
-    def initialize(search_terms)
-      hash = build_query(search_terms)
-      uri = build_uri(self.class, hash)
-      @doc = fetch_page(uri)
-    end
-
     def fetch_papers
-      data = []
-      return data if @doc.nil?
-
-      @doc.css("div[class='gs_ri']")&.map do |paper|
+      document.css("div[class='gs_ri']")&.each_with_object([]) do |paper, array|
         next if paper.css("h3[class='gs_rt']>a").empty?
 
         hash = {
@@ -29,9 +20,8 @@ module Sources
           date: Time.now.year.to_s
         }
 
-        data << hash
+        array << hash
       end
-      data
     end
 
     private

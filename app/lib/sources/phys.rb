@@ -7,17 +7,8 @@ module Sources
     BASE_URL = 'phys.org'
     SEARCH_PATH = '/search/'
 
-    def initialize(search_terms)
-      hash = build_query(search_terms)
-      uri = build_uri(self.class, hash)
-      @doc = fetch_page(uri)
-    end
-
     def fetch_papers
-      data = []
-      return data if @doc.nil?
-
-      @doc.css("div[class='sorted-article-content w-100 d-flex flex-column']")&.map do |paper|
+      document.css("div[class='sorted-article-content w-100 d-flex flex-column']")&.each_with_object([]) do |paper, array|
         header = paper.css("h4[class='mb-2']")
         next if header.nil?
 
@@ -28,9 +19,8 @@ module Sources
           description: paper.css("p[class='mb-2']").text.strip
         }
 
-        data << hash
+        array << hash
       end
-      data
     end
 
     private

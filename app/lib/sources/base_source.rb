@@ -7,18 +7,26 @@ require 'openssl'
 
 module Sources
   class BaseSource
+    attr_reader :document
+
+    def initialize(search_terms)
+      hash = build_query(search_terms)
+      uri = build_uri(self.class, hash)
+      @document = fetch_page(uri)
+    end
+
     def fetch_page(uri)
       count = 0
       begin
         Nokogiri::HTML(open(
-                        uri,
-                        ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
-                        'User-Agent' => 'firefox'
-                      ))
+                         uri,
+                         ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
+                         'User-Agent' => 'firefox'
+                       ))
       rescue OpenURI::HTTPError => e
         response = e.io
         puts "Rescued: #{uri} from #{response.status}"
-        return nil
+        nil
       rescue Errno::ECONNRESET => e
         count += 1
         retry unless count > 10
